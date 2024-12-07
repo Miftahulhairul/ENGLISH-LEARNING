@@ -110,3 +110,68 @@ ENGLISH LEARNING FOR BEGINNERS
     </script>
 </body>
 </html>
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
+
+
+class MainScreen(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(orientation="vertical", **kwargs)
+
+        # Header
+        self.header = Label(
+            text="Learn English Everyday",
+            font_size=24,
+            size_hint=(1, 0.1)
+        )
+        self.add_widget(self.header)
+
+        # Scrollable content
+        self.scroll = ScrollView(size_hint=(1, 0.8))
+        self.content = BoxLayout(orientation="vertical", size_hint_y=None)
+        self.content.bind(minimum_height=self.content.setter('height'))
+
+        # Add categories
+        categories = [
+            "Morning Routine",
+            "Talking with Friends",
+            "Workplace Conversations",
+            "Safety Discussions",
+            "Grammar Tips"
+        ]
+
+        for category in categories:
+            btn = Button(
+                text=category,
+                size_hint_y=None,
+                height=50,
+                on_press=self.open_category
+            )
+            self.content.add_widget(btn)
+
+        self.scroll.add_widget(self.content)
+        self.add_widget(self.scroll)
+
+        # Footer
+        self.footer = Label(
+            text="Developed for Easy Learning",
+            font_size=14,
+            size_hint=(1, 0.1)
+        )
+        self.add_widget(self.footer)
+
+    def open_category(self, instance):
+        # Logic for handling category click
+        self.header.text = f"Selected: {instance.text}"
+
+
+class LearnEnglishApp(App):
+    def build(self):
+        return MainScreen()
+
+
+if __name__ == "__main__":
+    LearnEnglishApp().run()
